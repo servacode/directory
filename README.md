@@ -58,3 +58,15 @@ pnpm verify:dynamic-directory
 ```
 
 Production release remains blocked until the external build/device/database gates documented in `PROJECT-STATUS.md` pass.
+
+## Render staging
+
+The release candidate includes a staging-only Render Blueprint in `render.yaml` and a deployment runbook at `docs/operations/render-staging.md`.
+
+Validate its repository configuration with:
+
+```sh
+pnpm verify:render-staging
+```
+
+Render is used only for staging qualification. Final production hosting/domain remain a separate post-qualification decision.

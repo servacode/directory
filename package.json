@@ -36,7 +36,8 @@
     "verify:android-native": "node scripts/check-android-native-scaffold.mjs",
     "db:verify-live": "node scripts/db-live-verify.mjs",
     "verify:error-codes": "node scripts/verify-error-codes.mjs",
-    "qualify:staging": "node scripts/staging-qualify.mjs"
+    "qualify:staging": "node scripts/staging-qualify.mjs",
+    "verify:render-staging": "node scripts/verify-render-staging.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",

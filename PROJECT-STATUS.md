@@ -86,3 +86,16 @@ Run `pnpm qualify:staging` first. It is intentionally fail-closed and does not r
 **GO — REAL STAGING & PHYSICAL-DEVICE QUALIFICATION.**
 
 **NO-GO — PUBLIC PRODUCTION RELEASE until all external gates above pass.**
+
+## Render staging preparation
+
+- Render Blueprint added at repository root: `render.yaml`.
+- Frankfurt staging topology: API + Admin + Render Postgres.
+- API staging service uses a persistent disk for public/private upload persistence across redeploys.
+- Render Postgres is private-network-only and migrations enable PostGIS/`btree_gist`.
+- API migrations and idempotent core seed run as a Render pre-deploy command.
+- Staging Dockerfiles intentionally permit connected dependency resolution while no lockfile exists; production Dockerfiles still require a committed lockfile and frozen install.
+- Render staging configuration gate: `PASS`.
+- Runbook: `docs/operations/render-staging.md`.
+
+**Render decision:** `READY TO CREATE STAGING BLUEPRINT — DEPLOY NOT YET EXECUTED`.

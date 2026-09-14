@@ -1,0 +1,24 @@
+FROM node:24-bookworm-slim AS build
+RUN corepack enable
+WORKDIR /workspace
+COPY . .
+RUN pnpm install --no-frozen-lockfile
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+RUN test -n "$NEXT_PUBLIC_API_URL" || (echo 'NEXT_PUBLIC_API_URL is required for the Render staging admin build' >&2; exit 1)
+RUN pnpm --filter @health/contracts build \
+ && pnpm --filter @health/config build \
+ && pnpm --filter @health/design-tokens build \
+ && pnpm --filter @health/i18n build \
+ && pnpm --filter @health/icon-registry build \
+ && pnpm --filter @health/admin build
+
+FROM node:24-bookworm-slim AS runtime
+ENV NODE_ENV=production
+WORKDIR /app
+COPY --from=build --chown=node:node /workspace/apps/admin/.next/standalone ./
+COPY --from=build --chown=node:node /workspace/apps/admin/.next/static ./apps/admin/.next/static
+USER node
+EXPOSE 10000
+ENV PORT=10000
+CMD ["node","apps/admin/server.js"]

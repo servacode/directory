@@ -1,0 +1,30 @@
+FROM node:24-bookworm-slim AS build
+RUN corepack enable
+WORKDIR /workspace
+COPY . .
+# Staging intentionally permits dependency resolution without a committed lockfile.
+# Production Dockerfiles remain fail-closed and require pnpm-lock.yaml.
+RUN pnpm install --no-frozen-lockfile
+RUN pnpm --filter @health/contracts build \
+ && pnpm --filter @health/config build \
+ && pnpm --filter @health/shared-types build \
+ && pnpm --filter @health/design-tokens build \
+ && pnpm --filter @health/i18n build \
+ && pnpm --filter @health/icon-registry build \
+ && pnpm --filter @health/formatters build \
+ && pnpm --filter @health/api build
+RUN pnpm --filter @health/api deploy --prod /prod/api
+
+FROM node:24-bookworm-slim AS runtime
+ENV NODE_ENV=production
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends postgresql-client ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+RUN mkdir -p /app/storage && chown -R node:node /app/storage
+COPY --from=build --chown=node:node /prod/api ./apps/api
+COPY --from=build --chown=node:node /workspace/infrastructure/database ./infrastructure/database
+COPY --from=build --chown=node:node /workspace/scripts/db-migrate.mjs /workspace/scripts/db-seed.mjs ./scripts/
+USER node
+EXPOSE 10000
+CMD ["node","apps/api/dist/main.js"]

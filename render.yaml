@@ -1,0 +1,78 @@
+# Render Staging Blueprint — Directory Platform
+# This file is intentionally staging-only. Production uses infrastructure/production.
+services:
+  - type: web
+    name: directory-api-stg-466ef4d
+    runtime: docker
+    region: frankfurt
+    plan: 0.5c-512mb
+    dockerfilePath: ./infrastructure/render/Dockerfile.api
+    dockerContext: .
+    healthCheckPath: /api/v1/health/ready
+    preDeployCommand: node scripts/db-migrate.mjs && node scripts/db-seed.mjs
+    disk:
+      name: staging-uploads
+      mountPath: /app/storage
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: API_PORT
+        value: "10000"
+      - key: TRUST_PROXY_HOPS
+        value: "1"
+      - key: APP_TIMEZONE
+        value: Asia/Damascus
+      - key: UPLOAD_DIR
+        value: /app/storage
+      - key: DATABASE_POOL_MAX
+        value: "5"
+      - key: DATABASE_CONNECTION_TIMEOUT_MS
+        value: "5000"
+      - key: DATABASE_IDLE_TIMEOUT_MS
+        value: "30000"
+      - key: DATABASE_STATEMENT_TIMEOUT_MS
+        value: "8000"
+      - key: DATABASE_SLOW_QUERY_MS
+        value: "250"
+      - key: ACCESS_TOKEN_TTL_SECONDS
+        value: "900"
+      - key: REFRESH_TOKEN_TTL_SECONDS
+        value: "2592000"
+      - key: CORS_ORIGINS
+        value: https://directory-admin-stg-466ef4d.onrender.com
+      - key: DATABASE_URL
+        fromDatabase:
+          name: directory-db-stg-466ef4d
+          property: connectionString
+      - key: ACCESS_TOKEN_SECRET
+        generateValue: true
+      - key: REFRESH_TOKEN_SECRET
+        generateValue: true
+      - key: OTP_HMAC_SECRET
+        generateValue: true
+      - key: WHATSAPP_RECOVERY_WEBHOOK_URL
+        value: ""
+      - key: WHATSAPP_RECOVERY_WEBHOOK_TOKEN
+        value: ""
+
+  - type: web
+    name: directory-admin-stg-466ef4d
+    runtime: docker
+    region: frankfurt
+    plan: free
+    dockerfilePath: ./infrastructure/render/Dockerfile.admin
+    dockerContext: .
+    healthCheckPath: /
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://directory-api-stg-466ef4d.onrender.com/api/v1
+
+databases:
+  - name: directory-db-stg-466ef4d
+    region: frankfurt
+    plan: free
+    postgresMajorVersion: "18"
+    databaseName: directory_staging
+    user: directory_staging
+    ipAllowList: []
