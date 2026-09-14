@@ -1,0 +1,1 @@
+{"extends":"../../tsconfig.base.json","compilerOptions":{"module":"NodeNext","moduleResolution":"NodeNext","outDir":".tmp-discovery-core","rootDir":"../..","baseUrl":"../..","paths":{"@health/contracts":["packages/contracts/src/index.ts"]}},"include":["src/features/discovery/discovery-policy.ts","../../packages/contracts/src/**/*.ts"]}

@@ -1,0 +1,1 @@
+import{Module}from'@nestjs/common';import{AuthModule}from'../auth/auth.module.js';import{ProfileImageController}from'./profile-image.controller.js';import{ProfileImageService}from'./profile-image.service.js';@Module({imports:[AuthModule],controllers:[ProfileImageController],providers:[ProfileImageService]})export class AccountModule{}

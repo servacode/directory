@@ -1,0 +1,2 @@
+import{Module}from'@nestjs/common';import{AuthModule}from'../auth/auth.module.js';import{AdminDirectoryCategoriesController}from'./admin-directory-categories.controller.js';import{DirectoryCatalogService}from'./directory-catalog.service.js';import{PublicDirectoryCategoriesController}from'./public-directory-categories.controller.js';
+@Module({imports:[AuthModule],controllers:[PublicDirectoryCategoriesController,AdminDirectoryCategoriesController],providers:[DirectoryCatalogService],exports:[DirectoryCatalogService]})export class DirectoryModule{}

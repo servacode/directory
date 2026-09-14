@@ -1,0 +1,47 @@
+{
+  "name": "@health-directory/root",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@12.4.1",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "dev": "pnpm -r --parallel --filter './apps/*' dev",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "build": "pnpm -r build",
+    "doctor": "node scripts/doctor.mjs",
+    "audit:centralization": "node scripts/centralization-audit.mjs",
+    "verify:foundation": "node scripts/verify-foundation.mjs",
+    "verify:phase4": "node scripts/verify-phase4.mjs",
+    "verify:phase5": "node scripts/verify-phase5.mjs",
+    "verify:phase6": "node scripts/verify-phase6.mjs",
+    "verify:phase7": "node scripts/verify-phase7.mjs",
+    "verify:phase8": "node scripts/verify-phase8.mjs",
+    "verify:phase9": "node scripts/verify-phase9.mjs",
+    "verify:phase10": "node scripts/verify-phase10.mjs",
+    "verify:phase11": "node scripts/verify-phase11.mjs",
+    "verify:phase12": "node scripts/verify-phase12.mjs",
+    "db:backup": "node scripts/db-backup.mjs",
+    "db:restore-test": "node scripts/db-restore-test.mjs",
+    "verify:phase13": "node scripts/verify-phase13.mjs",
+    "verify:phase14": "node scripts/verify-phase14.mjs",
+    "db:migrate": "node scripts/db-migrate.mjs",
+    "db:seed": "node scripts/db-seed.mjs",
+    "verify:phase15": "node scripts/verify-phase15.mjs",
+    "verify:dynamic-directory": "node scripts/verify-dynamic-directory.mjs",
+    "verify:remediation": "node scripts/verify-remediation.mjs",
+    "verify:android-native": "node scripts/check-android-native-scaffold.mjs",
+    "db:verify-live": "node scripts/db-live-verify.mjs",
+    "verify:error-codes": "node scripts/verify-error-codes.mjs",
+    "qualify:staging": "node scripts/staging-qualify.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.35.0",
+    "eslint": "^9.35.0",
+    "prettier": "^3.6.2",
+    "typescript": "^7.0.0"
+  }
+}

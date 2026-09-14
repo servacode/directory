@@ -1,0 +1,30 @@
+name: ci
+on:
+  push:
+  pull_request:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.4.1
+          run_install: false
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm verify:foundation
+      - run: pnpm audit:centralization
+      - run: pnpm verify:dynamic-directory
+      - run: pnpm verify:remediation
+      - run: pnpm verify:error-codes
+      - run: pnpm verify:phase12
+      - run: pnpm verify:phase14
+      - run: pnpm verify:phase15
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm test
+      - run: pnpm build

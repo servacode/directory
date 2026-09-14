@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { facilitySubmissionIssues } from '../../../.tmp-facility-core/apps/api/src/modules/facilities/facility-submission-policy.js';
+const base={specialization:'GENERIC',status:'DRAFT',namePresent:true,phonePresent:true,provincePresent:true,cityPresent:true,addressPresent:true,locationPresent:true,provinceActive:true,cityActive:true,businessDayCount:7,businessHoursRequired:true,doctorNamePresent:false,specialtyActive:false,nursingServiceCount:0,verificationComplete:true,registrationEnabled:true};
+test('generic commercial category uses common facility rules',()=>assert.deepEqual(facilitySubmissionIssues(base),[]));
+test('pharmacy uses common data plus configurable verification',()=>assert.deepEqual(facilitySubmissionIssues({...base,specialization:'PHARMACY'}),[]));
+test('clinic requires doctor name and active specialty',()=>assert.deepEqual(facilitySubmissionIssues({...base,specialization:'MEDICAL_CLINIC'}),['DOCTOR_NAME_REQUIRED','SPECIALTY_REQUIRED']));
+test('nursing requires at least one active service',()=>assert.deepEqual(facilitySubmissionIssues({...base,specialization:'NURSING_CENTER'}),['NURSING_SERVICE_REQUIRED']));
+test('verification is mandatory when policy says evidence is missing',()=>assert.equal(facilitySubmissionIssues({...base,verificationComplete:false}).includes('VERIFICATION_REQUIRED'),true));
+test('registration switch is enforced at submission',()=>assert.equal(facilitySubmissionIssues({...base,registrationEnabled:false}).includes('CATEGORY_REGISTRATION_DISABLED'),true));
+test('business hours may be disabled by category capability',()=>assert.deepEqual(facilitySubmissionIssues({...base,businessHoursRequired:false,businessDayCount:0}),[]));
+test('rejected facility may be corrected and resubmitted',()=>assert.deepEqual(facilitySubmissionIssues({...base,status:'REJECTED'}),[]));

@@ -1,0 +1,9 @@
+:root {
+  --health-color-app-background:#F8FAFC;--health-color-surface:#FFFFFF;--health-color-surface-secondary:#F1F5F9;--health-color-border:#E2E8F0;
+  --health-color-text-primary:#0F172A;--health-color-text-secondary:#475569;--health-color-text-muted:#64748B;--health-color-text-disabled:#94A3B8;
+  --health-color-primary:#0F766E;--health-color-primary-soft:#CCFBF1;--health-color-primary-strong:#115E59;--health-color-secondary:#2563EB;
+  --health-color-success:#16A34A;--health-color-duty:#0891B2;--health-color-warning:#D97706;--health-color-danger:#DC2626;--health-color-closed:#64748B;
+  --health-radius-sm:8px;--health-radius-md:12px;--health-radius-lg:16px;--health-radius-pill:999px;
+  --health-space-xs:4px;--health-space-sm:8px;--health-space-md:12px;--health-space-lg:16px;--health-space-xl:24px;--health-space-xxl:32px;
+  --health-font-arabic:Tajawal,system-ui,sans-serif;
+}

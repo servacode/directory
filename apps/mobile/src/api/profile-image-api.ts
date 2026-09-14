@@ -1,0 +1,2 @@
+import type{UploadTransport,NativeUploadFile}from'../platform/network/upload-transport.js';import type{ReliableApiClient}from'../platform/network/reliable-api-client.js';
+export class ProfileImageApi{constructor(private readonly upload:UploadTransport,private readonly client:ReliableApiClient){}replace(file:NativeUploadFile){return this.upload.image('/users/me/profile-image',file)}remove(){return this.client.request<{ok:true}>({method:'DELETE',path:'/users/me/profile-image'})}}

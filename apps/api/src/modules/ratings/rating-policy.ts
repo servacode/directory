@@ -1,0 +1,1 @@
+export function canRateFacility(input:{facilityStatus:string;isFacilityMember:boolean;score:number}){if(!Number.isInteger(input.score)||input.score<1||input.score>5)return'INVALID_RATING' as const;if(input.facilityStatus!=='ACTIVE')return'CANNOT_RATE_INACTIVE_FACILITY' as const;if(input.isFacilityMember)return'CANNOT_RATE_OWN_FACILITY' as const;return'OK' as const;}

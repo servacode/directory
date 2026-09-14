@@ -1,0 +1,30 @@
+{
+  "name": "@health/admin",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint app src --max-warnings=0",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "next": "16.3.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "@health/design-tokens": "workspace:*",
+    "@health/i18n": "workspace:*",
+    "@health/icon-registry": "workspace:*",
+    "@health/contracts": "workspace:*",
+    "@health/config": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "typescript": "^7.0.0",
+    "eslint": "^9.35.0",
+    "vitest": "^3.2.4"
+  }
+}

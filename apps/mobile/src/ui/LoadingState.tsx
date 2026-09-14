@@ -1,0 +1,2 @@
+import React from'react';import{ActivityIndicator,StyleSheet,View}from'react-native';import{semanticColors,spacing}from'@health/design-tokens';import{defaultLocale,t}from'@health/i18n';import{AppText}from'./AppText.js';
+export function LoadingState(){return <View style={styles.box}><ActivityIndicator color={semanticColors.primary}/><AppText>{t(defaultLocale,'common.loading')}</AppText></View>};const styles=StyleSheet.create({box:{padding:spacing.xl,alignItems:'center',gap:spacing.sm}});

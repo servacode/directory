@@ -1,0 +1,2 @@
+import React from 'react';import { StyleSheet, View } from 'react-native';import { spacing } from '@health/design-tokens';import { AppIcon } from './AppIcon.js';import { AppText } from './AppText.js';
+export function EmptyState({message}:{message:string}){return <View style={styles.box}><AppIcon name="info"/><AppText style={styles.text}>{message}</AppText></View>};const styles=StyleSheet.create({box:{alignItems:'center',gap:spacing.sm,padding:spacing.xl},text:{textAlign:'center'}});

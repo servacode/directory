@@ -1,0 +1,1 @@
+import{Global,Module}from'@nestjs/common';import{PlatformSettingsController}from'./platform-settings.controller.js';import{PlatformSettingsService}from'./platform-settings.service.js';@Global()@Module({controllers:[PlatformSettingsController],providers:[PlatformSettingsService],exports:[PlatformSettingsService]})export class PlatformSettingsModule{}

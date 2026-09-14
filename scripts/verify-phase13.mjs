@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+const read=(p)=>fs.readFileSync(p,'utf8');const checks=[];const check=(n,c)=>{checks.push([n,!!c]);if(!c)process.exitCode=1};
+const db=read('apps/api/src/database/database.service.ts');const settings=read('apps/api/src/modules/settings/platform-settings.service.ts');const health=read('apps/api/src/health/health.controller.ts');const admin=read('apps/api/src/modules/admin/admin-facility-review.service.ts');const media=read('apps/api/src/storage/media.controller.ts');const mobile=read('apps/mobile/src/platform/network/reliable-api-client.ts');const cache=read('apps/mobile/src/platform/network/cache-policy.ts');
+check('DB statement timeout configured',db.includes('statement_timeout'));
+check('Slow query timing exists',db.includes('slow_db_query'));
+check('Settings cache exists',settings.includes('this.cache')&&settings.includes('ttlMs'));
+check('Readiness pings DB',health.includes('db.ping()'));
+check('Admin list server-paginated',admin.includes('LIMIT $2 OFFSET $3'));
+check('Public facility media immutable cache',media.includes('immutable'));
+check('Writes are not automatically retried',mobile.includes("input.method==='GET'"));
+check('Single refresh coordination exists',mobile.includes('refreshInFlight'));
+check('Duty stale warning policy exists',cache.includes("DUTY:")&&cache.includes('requiresFreshnessWarning:true'));
+check('Backup and restore scripts exist',fs.existsSync('scripts/db-backup.mjs')&&fs.existsSync('scripts/db-restore-test.mjs'));
+for(const [n,ok] of checks)console.log(`${ok?'PASS':'FAIL'} - ${n}`);if(process.exitCode)throw new Error('Phase 13 verification failed');console.log(`Phase 13 static audit: ${checks.length}/${checks.length} PASS`);

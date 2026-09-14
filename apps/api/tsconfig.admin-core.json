@@ -1,0 +1,5 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {"module":"NodeNext","moduleResolution":"NodeNext","outDir":".tmp-admin-core","rootDir":"../..","baseUrl":"../..","paths":{"@health/contracts":["packages/contracts/src/index.ts"]}},
+  "include":["src/modules/admin/admin-review-policy.ts","../../packages/contracts/src/**/*.ts"]
+}

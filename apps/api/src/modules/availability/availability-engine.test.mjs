@@ -1,0 +1,13 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {evaluateAvailability,isOpenAt} from '../../../.tmp-availability-core/apps/api/src/modules/availability/availability-engine.js';
+const zone='Asia/Damascus';
+const days=['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY'];
+const schedule=(periodsByDay={},opts={})=>days.map(day=>({dayOfWeek:day,isClosed:opts.closed?.includes(day)??false,is24Hours:opts.open24?.includes(day)??false,periods:opts.closed?.includes(day)||opts.open24?.includes(day)?[]:(periodsByDay[day]??[{startTime:'08:00',endTime:'22:00',endsNextDay:false}])}));
+const at=(iso)=>new Date(iso);
+test('simple daytime opening works in Damascus timezone',()=>assert.equal(evaluateAvailability({now:at('2026-09-14T07:00:00Z'),timeZone:zone,schedule:schedule()}).status,'OPEN_NOW'));
+test('simple closed after hours returns next opening',()=>{const r=evaluateAvailability({now:at('2026-09-14T20:30:00Z'),timeZone:zone,schedule:schedule()});assert.equal(r.status,'CLOSED_NOW');assert.ok(r.nextOpenAt)});
+test('split shift is closed between periods',()=>{const s=schedule({MONDAY:[{startTime:'08:00',endTime:'13:00',endsNextDay:false},{startTime:'16:00',endTime:'22:00',endsNextDay:false}]});const r=evaluateAvailability({now:at('2026-09-14T11:00:00Z'),timeZone:zone,schedule:s});assert.equal(r.status,'CLOSED_NOW');assert.ok(r.nextOpenAt)});
+test('overnight period remains open after midnight from previous day',()=>{const s=schedule({MONDAY:[{startTime:'20:00',endTime:'02:00',endsNextDay:true}]},{closed:['TUESDAY']});assert.equal(isOpenAt(at('2026-09-14T22:00:00Z'),zone,s),true)});
+test('24 hour day is open',()=>{const s=schedule({}, {open24:['MONDAY']});assert.equal(evaluateAvailability({now:at('2026-09-14T10:00:00Z'),timeZone:zone,schedule:s}).status,'OPEN_NOW')});
+test('temporary closure overrides normal open state',()=>{const r=evaluateAvailability({now:at('2026-09-14T10:00:00Z'),timeZone:zone,schedule:schedule(),temporaryClosure:{startsAt:'2026-09-14T09:00:00Z',endsAt:'2026-09-14T12:00:00Z'}});assert.equal(r.status,'TEMPORARILY_CLOSED');assert.equal(r.temporaryCloseEndsAt,'2026-09-14T12:00:00Z')});
+test('fully closed week has no next opening',()=>{const r=evaluateAvailability({now:at('2026-09-14T10:00:00Z'),timeZone:zone,schedule:schedule({}, {closed:days})});assert.equal(r.status,'CLOSED_NOW');assert.equal(r.nextOpenAt,undefined)});

@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noEmit": false,
+    "outDir": ".tmp-security-core",
+    "rootDir": "src/security"
+  },
+  "include": [
+    "src/security/node-buffer-shim.d.ts",
+    "src/security/image-security.ts",
+    "src/security/fixed-window-rate-limiter.ts",
+    "src/security/maintenance-mode.policy.ts"
+  ]
+}

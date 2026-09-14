@@ -1,0 +1,44 @@
+{
+  "name": "@health/mobile",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "react-native start",
+    "android": "react-native run-android",
+    "build": "node ./scripts/build-check.mjs",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --max-warnings=0",
+    "test": "node ../../scripts/run-node-tests.mjs src",
+    "pretest": "tsc -p tsconfig.geo-core.json && tsc -p tsconfig.discovery-core.json && tsc -p tsconfig.network-core.json"
+  },
+  "dependencies": {
+    "react": "19.2.0",
+    "react-native": "0.87.1",
+    "@health/design-tokens": "workspace:*",
+    "@health/i18n": "workspace:*",
+    "@health/icon-registry": "workspace:*",
+    "@health/formatters": "workspace:*",
+    "@health/contracts": "workspace:*",
+    "@health/config": "workspace:*",
+    "@maplibre/maplibre-react-native": "11.3.10",
+    "@react-native-community/geolocation": "3.4.0",
+    "react-native-permissions": "5.6.1",
+    "@react-navigation/native": "7.3.18",
+    "@react-navigation/native-stack": "7.18.10",
+    "@react-navigation/bottom-tabs": "7.18.18",
+    "react-native-safe-area-context": "5.9.1",
+    "react-native-screens": "4.27.0",
+    "react-native-gesture-handler": "3.3.0",
+    "react-native-svg": "15.15.5",
+    "lucide-react-native": "1.46.0",
+    "react-native-config": "1.7.2",
+    "react-native-keychain": "10.0.0",
+    "react-native-image-picker": "8.2.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.12",
+    "typescript": "^7.0.0",
+    "eslint": "^9.35.0",
+    "jest": "^30.0.5"
+  }
+}

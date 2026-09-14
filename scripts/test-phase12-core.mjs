@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import { FixedWindowRateLimiter } from '../apps/api/.tmp-security-core/fixed-window-rate-limiter.js';
+import { detectImageMime, stripImageMetadata } from '../apps/api/.tmp-security-core/image-security.js';
+let now=1_000;const limiter=new FixedWindowRateLimiter(()=>now);const rule={limit:2,windowMs:1000};
+assert.equal(limiter.consume('a',rule).allowed,true);assert.equal(limiter.consume('a',rule).allowed,true);assert.equal(limiter.consume('a',rule).allowed,false);now=2001;assert.equal(limiter.consume('a',rule).allowed,true);
+const png=Buffer.concat([Buffer.from([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a]),Buffer.from([0,0,0,0]),Buffer.from('IEND'),Buffer.from([0xae,0x42,0x60,0x82])]);
+assert.equal(detectImageMime(png),'image/png');assert.equal(stripImageMetadata(png,'image/png').equals(png),true);
+const jpeg=Buffer.from([0xff,0xd8,0xff,0xd9]);assert.equal(detectImageMime(jpeg),'image/jpeg');
+const webp=Buffer.concat([Buffer.from('RIFF'),Buffer.from([4,0,0,0]),Buffer.from('WEBP')]);assert.equal(detectImageMime(webp),'image/webp');
+console.log('phase12-core: 7 assertions PASS');

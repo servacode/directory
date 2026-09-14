@@ -1,0 +1,5 @@
+{
+ "extends":"../../tsconfig.base.json",
+ "compilerOptions":{"module":"NodeNext","moduleResolution":"NodeNext","outDir":".tmp-availability-core","rootDir":"../..","baseUrl":"../..","paths":{"@health/contracts":["packages/contracts/src/index.ts"]}},
+ "include":["src/modules/availability/availability-engine.ts","src/modules/availability/time-zone.ts","src/modules/availability/time-provider.ts","../../packages/contracts/src/**/*.ts"]
+}

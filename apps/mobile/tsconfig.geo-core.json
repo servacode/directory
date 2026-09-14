@@ -1,0 +1,29 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": ".tmp-geo-core",
+    "rootDir": "../..",
+    "baseUrl": "../..",
+    "paths": {
+      "@health/contracts": [
+        "packages/contracts/src/index.ts"
+      ],
+      "@health/config": [
+        "packages/config/src/index.ts"
+      ],
+      "@health/icon-registry": [
+        "packages/icon-registry/src/index.ts"
+      ]
+    }
+  },
+  "include": [
+    "src/platform/location/location-service.ts",
+    "src/platform/maps/map-provider.ts",
+    "src/platform/maps/directions-service.ts",
+    "../../packages/contracts/src/**/*.ts",
+    "../../packages/config/src/**/*.ts",
+    "../../packages/icon-registry/src/**/*.ts"
+  ]
+}

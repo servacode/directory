@@ -1,0 +1,1 @@
+{"extends":"../../tsconfig.base.json","compilerOptions":{"module":"NodeNext","moduleResolution":"NodeNext","outDir":".tmp-network-core","rootDir":"src/platform/network"},"include":["src/platform/network/reliable-api-client.ts","src/platform/network/cache-policy.ts"]}

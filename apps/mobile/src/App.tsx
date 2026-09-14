@@ -1,0 +1,4 @@
+import React,{useEffect}from'react';import{ActivityIndicator,StyleSheet,View}from'react-native';import{semanticColors}from'@health/design-tokens';import{AppProvider,useApp}from'./platform/AppContext.js';import{RootNavigation}from'./navigation/RootNavigation.js';import{MaintenanceScreen}from'./screens/MaintenanceScreen.js';
+function Bootstrap(){const{restoreSession,platformConfig}=useApp();const[ready,setReady]=React.useState(false);useEffect(()=>{restoreSession().finally(()=>setReady(true))},[restoreSession]);if(!ready)return <View style={styles.loading}><ActivityIndicator color={semanticColors.primary}/></View>;if(platformConfig?.maintenanceMode===true)return <MaintenanceScreen onRetry={restoreSession}/>;return <RootNavigation/>}
+export function App():React.JSX.Element{return <AppProvider><Bootstrap/></AppProvider>}
+const styles=StyleSheet.create({loading:{flex:1,alignItems:'center',justifyContent:'center',backgroundColor:semanticColors.appBackground}});

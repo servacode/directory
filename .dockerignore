@@ -1,0 +1,12 @@
+.git
+**/node_modules
+**/dist
+**/.next
+**/.tmp*
+.tmp
+backups
+var
+*.log
+.env
+.env.*
+!*.example

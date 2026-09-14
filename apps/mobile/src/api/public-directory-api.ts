@@ -1,0 +1,19 @@
+import type { CategoryVerificationRequirementDTO, CityDTO, DirectoryCategoryDTO, DoctorSpecialtyDTO, FacilityListDTO, FacilityMapPinDTO, HomeResponseDTO, NursingServiceDTO, PaginatedResponse, ProvinceDTO, PublicFacilityDetailDTO, PublicPlatformConfigDTO } from '@health/contracts';
+import type { ReliableApiClient } from '../platform/network/reliable-api-client.js';
+export interface CoordinatesInput{readonly latitude:number;readonly longitude:number;}
+const addCoords=(q:URLSearchParams,c?:CoordinatesInput)=>{if(c){q.set('latitude',String(c.latitude));q.set('longitude',String(c.longitude));}};
+export class PublicDirectoryApi{
+ constructor(private readonly client:ReliableApiClient){}
+ platformConfig(){return this.client.request<PublicPlatformConfigDTO>({method:'GET',path:'/config/public',authenticated:false})}
+ provinces(){return this.client.request<ProvinceDTO[]>({method:'GET',path:'/locations/provinces',authenticated:false})}
+ cities(provinceId:string){return this.client.request<CityDTO[]>({method:'GET',path:`/locations/cities?provinceId=${encodeURIComponent(provinceId)}`,authenticated:false})}
+ specialties(){return this.client.request<DoctorSpecialtyDTO[]>({method:'GET',path:'/specialties',authenticated:false})}
+ nursingServices(){return this.client.request<NursingServiceDTO[]>({method:'GET',path:'/nursing-services',authenticated:false})}
+ categories(provinceId:string,purpose:'public'|'registration'='public'){const q=new URLSearchParams({provinceId,purpose});return this.client.request<DirectoryCategoryDTO[]>({method:'GET',path:`/directory/categories?${q}`,authenticated:false})}
+ verificationRequirements(categoryId:string){return this.client.request<CategoryVerificationRequirementDTO[]>({method:'GET',path:`/directory/categories/${encodeURIComponent(categoryId)}/verification-requirements`,authenticated:false})}
+ home(provinceId:string,coordinates?:CoordinatesInput){const q=new URLSearchParams({provinceId});addCoords(q,coordinates);return this.client.request<HomeResponseDTO>({method:'GET',path:`/home?${q}`,authenticated:false})}
+ facilities(input:{provinceId:string;categoryId:string;specialtyId?:string;nursingServiceId?:string;openNow?:boolean;dutyNow?:boolean;coordinates?:CoordinatesInput;page?:number;pageSize?:number}){const q=new URLSearchParams({provinceId:input.provinceId,categoryId:input.categoryId});if(input.specialtyId)q.set('specialtyId',input.specialtyId);if(input.nursingServiceId)q.set('nursingServiceId',input.nursingServiceId);if(input.openNow)q.set('openNow','true');if(input.dutyNow)q.set('dutyNow','true');if(input.page)q.set('page',String(input.page));if(input.pageSize)q.set('pageSize',String(input.pageSize));addCoords(q,input.coordinates);return this.client.request<PaginatedResponse<FacilityListDTO>>({method:'GET',path:`/directory/facilities?${q}`,authenticated:false})}
+ search(provinceId:string,query:string,coordinates?:CoordinatesInput,categoryId?:string,page=1,pageSize=20){const q=new URLSearchParams({provinceId,q:query,page:String(page),pageSize:String(pageSize)});if(categoryId)q.set('categoryId',categoryId);addCoords(q,coordinates);return this.client.request<PaginatedResponse<FacilityListDTO>>({method:'GET',path:`/directory/search?${q}`,authenticated:false})}
+ detail(id:string){return this.client.request<PublicFacilityDetailDTO>({method:'GET',path:`/directory/facilities/${encodeURIComponent(id)}`,authenticated:false})}
+ map(input:{provinceId:string;north:number;south:number;east:number;west:number;categoryId?:string;openNow?:boolean;dutyNow?:boolean}){const q=new URLSearchParams({provinceId:input.provinceId,north:String(input.north),south:String(input.south),east:String(input.east),west:String(input.west)});if(input.categoryId)q.set('categoryId',input.categoryId);if(input.openNow)q.set('openNow','true');if(input.dutyNow)q.set('dutyNow','true');return this.client.request<FacilityMapPinDTO[]>({method:'GET',path:`/directory/map?${q}`,authenticated:false})}
+}

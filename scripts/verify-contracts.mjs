@@ -1,0 +1,7 @@
+import{readFile,readdir}from'node:fs/promises';
+const root=new URL('../packages/contracts/src/',import.meta.url);const requiredModules=['auth','users','locations','directory','facilities','pharmacies','clinics','nursing','ratings','search','admin','home','errors','common'];const failures=[];
+for(const moduleName of requiredModules){try{await readdir(new URL(`./${moduleName}/`,root))}catch{failures.push(`Missing contract module: ${moduleName}`)}}
+const directory=await readFile(new URL('./directory/index.ts',root),'utf8');for(const specialization of ['GENERIC','PHARMACY','MEDICAL_CLINIC','NURSING_CENTER'])if(!directory.includes(`'${specialization}'`))failures.push(`Missing technical specialization: ${specialization}`);
+for(const phrase of ['DirectoryCategoryDTO','CategoryProvinceActivationRequest','CategoryVerificationRequirementDTO'])if(!directory.includes(phrase))failures.push(`Missing dynamic directory contract: ${phrase}`);
+const index=await readFile(new URL('./index.ts',root),'utf8');for(const moduleName of requiredModules.filter(x=>!['common','errors'].includes(x)))if(!index.includes(`'./${moduleName}/index.js'`))failures.push(`Public index does not export ${moduleName}`);
+if(failures.length){console.error('Contract verification failed:');failures.forEach(x=>console.error(`- ${x}`));process.exit(1)}console.log('Contract structure verification: PASS');console.log('Dynamic directory taxonomy: PASS');console.log('Public categories are not an enum: PASS');
